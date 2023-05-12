@@ -55,7 +55,7 @@ class Server:
         """method docs"""
         dataset = self.get_page(page, page_size)
         total_data = len(self.dataset())
-        print(total_data)
+        # print(total_data)
         total_pages = math.ceil(total_data / page_size)
         # print(start, end)
         # ======= USING tenary operator instead ========
