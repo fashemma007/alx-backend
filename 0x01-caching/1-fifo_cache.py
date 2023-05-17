@@ -21,6 +21,9 @@ class FIFOCache(BaseCaching):
                 # print(self.orders)
             elif key in self.cache_data:
                 self.cache_data.update(data)
+                # change the position of updated key in the `orders` list
+                self.orders.remove(key)
+                self.orders.append(key)
             else:
                 pop_it = self.orders.pop(0)
                 # print(f"To be deleted {pop_it}")
