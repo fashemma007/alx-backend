@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """module docs for 1-app.py"""
 from flask import Flask, render_template, request
-from flask_babel import Babel
+from flask_babel import Babel, gettext
 
 
 class Config(object):
@@ -27,8 +27,10 @@ def get_locale():
 @app.route("/")
 def index():
     """Homepage"""
-    results = {"title": "Welcome to Holberton", "header": "Hello world"}
-    return render_template("2-index.html", results=results)
+    home_title = gettext("Welcome to Holberton")
+    # home_header = "Hello world!"
+
+    return render_template("3-index.html", home_title=home_title)
 
 
 if __name__ == "__main__":
