@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """module docs for 1-app.py"""
 from flask import Flask, render_template, request
-from flask_babel import Babel, _
+from flask_babel import Babel
 
 
 class Config(object):
@@ -13,7 +13,7 @@ class Config(object):
 
 app = Flask(__name__)
 app.config.from_object(Config)  # load configurations
-print(app.config)  # see all configs
+# print(app.config)  # see all configs
 babel = Babel(app)
 
 
@@ -27,7 +27,7 @@ def get_locale():
 @app.route("/")
 def index():
     """Homepage"""
-    results = "Hello world"
+    results = {"title": "Welcome to Holberton", "header": "Hello world"}
     return render_template("2-index.html", results=results)
 
 

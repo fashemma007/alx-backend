@@ -20,7 +20,7 @@ babel = Babel(app)
 @app.route("/")
 def index():
     """Homepage"""
-    results = {"Hello world"}
+    results = {"title": "Welcome to Holberton", "header": "Hello world"}
     return render_template("1-index.html", results=results)
 
 
