@@ -8,7 +8,7 @@ class Config(object):
     """application configurations"""
     BABEL_DEFAULT_LOCALE = "en"
     LANGUAGES = ["en", "fr"]
-    TIMEZONE = "UTC"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
 app = Flask(__name__)
@@ -20,17 +20,15 @@ babel = Babel(app)
 @babel.localeselector
 def get_locale():
     """get locale"""
-    # return 'fr'
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+    return 'fr'
+    # return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route("/")
 def index():
     """Homepage"""
-    home_title = gettext("Welcome to Holberton")
-    # home_header = "Hello world!"
 
-    return render_template("3-index.html", home_title=home_title)
+    return render_template("3-index.html")
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ class Config(object):
     """application configurations"""
     BABEL_DEFAULT_LOCALE = "en"
     LANGUAGES = ["en", "fr"]
-    TIMEZONE = "UTC"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
 app = Flask(__name__)
