@@ -29,7 +29,7 @@ users = {
 def get_user() -> Union[Dict, None]:
     """Retrieves a user based on a user id.
     """
-    login_id = request.args.get('login_as', '')
+    login_id = request.args.get('login_as', None)  # get user id
     if login_id:
         return users.get(int(login_id), None)
     return None
@@ -47,14 +47,20 @@ def before_request() -> None:
 def get_locale() -> str:
     """Retrieves the locale for a web page.
     """
-    locale = request.args.get('locale', '')
-    if locale in app.config["LANGUAGES"]:
+    # [print(param) for param in request.args.lists()]
+    # get the locale param from the request url
+    locale = request.args.get("locale", None)
+    user = g.user  # user session
+    header_locale = request.headers.get('locale', None)  # header locale
+
+    if locale is None and user:
+        # get locale from user's login
+        locale = g.user.get('locale')
+    elif locale is None and header_locale:
+        locale = header_locale
+
+    if locale in app.config["LANGUAGES"]:  # chk for availability
         return locale
-    if g.user and g.user['locale'] in app.config["LANGUAGES"]:
-        return g.user['locale']
-    header_locale = request.headers.get('locale', '')
-    if header_locale in app.config["LANGUAGES"]:
-        return header_locale
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 

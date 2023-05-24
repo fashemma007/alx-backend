@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """A Basic Flask app with internationalization support.
 """
-import pytz
-from flask_babel import Babel
 from typing import Union, Dict
+from flask_babel import Babel
+import pytz
 from flask import Flask, render_template, request, g
 
 
@@ -30,7 +30,7 @@ users = {
 def get_user() -> Union[Dict, None]:
     """Retrieves a user based on a user id.
     """
-    login_id = request.args.get('login_as', '')
+    login_id = request.args.get('login_as', None)  # get user id
     if login_id:
         return users.get(int(login_id), None)
     return None
@@ -41,6 +41,7 @@ def before_request() -> None:
     """Performs some routines before each request's resolution.
     """
     user = get_user()
+    # print(request.args.get('timezone').strip())
     g.user = user
 
 
@@ -48,24 +49,30 @@ def before_request() -> None:
 def get_locale() -> str:
     """Retrieves the locale for a web page.
     """
-    locale = request.args.get('locale', '')
-    if locale in app.config["LANGUAGES"]:
+    # [print(param) for param in request.args.lists()]
+    # get the locale param from the request url
+    locale = request.args.get("locale", None)
+    user = g.user  # user session
+    header_locale = request.headers.get('locale', None)  # header locale
+
+    if locale is None and user:
+        # get locale from user's login
+        locale = g.user.get('locale')
+    elif locale is None and header_locale:
+        locale = header_locale
+
+    if locale in app.config["LANGUAGES"]:  # chk for availability
         return locale
-    if g.user and g.user['locale'] in app.config["LANGUAGES"]:
-        return g.user['locale']
-    header_locale = request.headers.get('locale', '')
-    if header_locale in app.config["LANGUAGES"]:
-        return header_locale
-    return app.config['BABEL_DEFAULT_LOCALE']
+    return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
 @babel.timezoneselector
 def get_timezone() -> str:
     """Retrieves the timezone for a web page.
     """
-    timezone = request.args.get('timezone', '').strip()
-    if not timezone and g.user:
-        timezone = g.user['timezone']
+    timezone = request.args.get('timezone', None)
+    if timezone is None and g.user:
+        timezone = g.user.get('timezone')
     try:
         return pytz.timezone(timezone).zone
     except pytz.exceptions.UnknownTimeZoneError:
