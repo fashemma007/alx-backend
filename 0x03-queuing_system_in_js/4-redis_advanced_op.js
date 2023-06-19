@@ -1,18 +1,17 @@
 import { createClient, print } from 'redis';
 
 
-const client = createClient();
+const client = createClient(); // create a redis client
 
-client.multi()
-  .hset('HolbertonSchools', 'Portland', 50, print)
-  .hset('HolbertonSchools', 'Seattle', 80, print)
-  .hset('HolbertonSchools', 'New York', 20, print)
-  .hset('HolbertonSchools', 'Bogota', 20, print)
-  .hset('HolbertonSchools', 'Cali', 40, print)
-  .hset('HolbertonSchools', 'Paris', 2, print)
-  .exec();
+const KEY = 'HolbertonSchools';
+const keys = ['Portland', 'Seattle', 'New York', 'Bogota', 'Cali', 'Paris'];
+const values = [50, 80, 20, 20, 40, 2];
 
-client.hgetall('HolbertonSchools', (error, value) => {
+keys.forEach((key, idx) => {
+  client.hset(KEY, key, values[idx], print);
+});
+
+client.hgetall(KEY, (error, value) => {
   console.log(value);
 });
 
