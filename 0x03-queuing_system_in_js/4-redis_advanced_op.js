@@ -2,6 +2,13 @@ import { createClient, print } from 'redis';
 
 
 const client = createClient(); // create a redis client
+client.on('error', error => {
+  console.log('Redis client not connected to the server:', error);
+});
+
+client.on('connect', () => {
+  console.log('Redis client connected to the server');
+});
 
 const KEY = 'HolbertonSchools';
 const keys = ['Portland', 'Seattle', 'New York', 'Bogota', 'Cali', 'Paris'];
