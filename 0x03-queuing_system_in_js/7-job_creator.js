@@ -56,7 +56,7 @@ queue.on("connect", () => {
 
 jobs.forEach(jobz => {
   // SHORTHAND
-  const job = queue.create('push_notification_code', jobz).save((error) => {
+  const job = queue.create('push_notification_code_2', jobz).save((error) => {
     if (!error) console.log(`Notification job created: ${job.id}`);
   });
 
