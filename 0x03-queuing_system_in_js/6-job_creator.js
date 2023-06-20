@@ -26,11 +26,15 @@ job.data = kueObj;
 job.save((error) => {
   if (!error) console.log(`Notification job created: ${job.id}`);
 });
+// ADD A DELAY
+// job.delay(10000).save((error) => {
+//   if (!error) console.log(`Notification job created: ${job.id}`);
+// });
 // When the job is completed, log to the console Notification job completed
 job.on('complete', () => {
-  console.log(`Notification job completed: ${job.id}`);
+  console.log('Notification job completed');
 });
 // When the job is failing, log to the console Notification job failed;
 job.on('failed', () => {
-  console.log(`Notification job failed: ${job.id}`);
+  console.log('Notification job failed');
 });
